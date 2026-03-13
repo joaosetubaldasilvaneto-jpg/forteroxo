@@ -3,197 +3,364 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forte Roxo Açaí - Pedidos</title>
+    <title>Forte Roxo Açaí - Comanda Digital</title>
     <style>
         :root {
             --primary: #9b4dff;
             --secondary: #25D366;
-            --bg-dark: #121212;
-            --card-bg: #1e1e1e;
-            --text-light: #e0e0e0;
+            --bg-dark: #111;
+            --card-bg: #1f1f1f;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: Arial, sans-serif;
             background: var(--bg-dark);
-            color: var(--text-light);
+            color: white;
             margin: 0;
-            padding: 20px;
+            padding: 15px;
             display: flex;
             justify-content: center;
         }
 
-        .container {
-            width: 100%;
-            max-width: 500px;
-        }
+        .container { width: 100%; max-width: 500px; }
 
-        h1 {
-            text-align: center;
-            color: var(--primary);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 30px;
-            border-bottom: 2px solid var(--primary);
-            padding-bottom: 10px;
-        }
+        h1 { text-align: center; color: var(--primary); border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-top: 5px; }
+        h3 { color: var(--primary); margin-bottom: 12px; font-size: 17px; border-left: 4px solid var(--primary); padding-left: 8px; }
 
-        h3 { color: var(--primary); margin-bottom: 15px; }
-
-        .card {
-            background: var(--card-bg);
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
+        .card { background: var(--card-bg); padding: 15px; margin-bottom: 15px; border-radius: 10px; }
 
         button {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 18px;
-            cursor: pointer;
-            transition: transform 0.2s, opacity 0.2s;
-            margin-top: 10px;
+            width: 100%; padding: 16px; border: none; border-radius: 8px;
+            font-weight: bold; font-size: 18px; cursor: pointer; margin-top: 10px;
         }
-
-        button:active { transform: scale(0.98); }
-
-        .btn-send { background: var(--secondary); color: white; margin-top: 25px; }
-        .btn-menu { background: var(--primary); color: white; }
-        .btn-back { background: transparent; color: #888; border: 1px solid #444; font-size: 14px; margin-bottom: 20px; }
+        .btn-menu { background: var(--primary); color: white; margin-bottom: 10px; }
+        .btn-add { background: #444; color: white; margin-top: 15px; }
+        .btn-send { background: var(--secondary); color: white; margin-top: 20px; font-size: 20px; }
+        .btn-back { background: transparent; color: #aaa; border: 1px solid #444; font-size: 15px; margin-bottom: 15px; }
+        .btn-remove { background: transparent; color: #ff4d4d; border: 1px solid #ff4d4d; font-size: 14px; padding: 6px; margin-top: 10px; border-radius: 6px;}
 
         label {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 14px;
-            margin: 8px 0;
-            background: #2a2a2a;
-            border-radius: 8px;
-            transition: background 0.3s;
-            cursor: pointer;
+            display: flex; align-items: center; gap: 10px; padding: 10px;
+            background: #2a2a2a; border-radius: 6px; cursor: pointer; font-size: 15px;
         }
 
-        label:hover { background: #333; }
+        /* Deixa os itens em 2 colunas para economizar espaço (como no papel) */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        @media (max-width: 380px) { .grid-2 { grid-template-columns: 1fr; } } /* 1 coluna em celular muito pequeno */
 
-        input[type="checkbox"], input[type="radio"] {
-            width: 20px;
-            height: 20px;
-            accent-color: var(--primary);
-        }
-
+        input[type="checkbox"], input[type="radio"] { width: 22px; height: 22px; accent-color: var(--primary); flex-shrink: 0; }
+        
         input[type=text] {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #333;
-            border-radius: 8px;
-            background: #1a1a1a;
-            color: white;
-            box-sizing: border-box;
-            margin-bottom: 20px;
+            width: 100%; padding: 15px; border: 2px solid #333; border-radius: 8px;
+            background: #1a1a1a; color: white; box-sizing: border-box; margin-bottom: 15px; font-size: 16px;
         }
-
         input[type=text]:focus { border-color: var(--primary); outline: none; }
 
-        .hidden { display: none; }
+        .limit-info { font-size: 12px; color: #aaa; margin-top: -8px; margin-bottom: 12px; display: block; }
         
-        .limit-info { font-size: 12px; color: #888; margin-top: -10px; margin-bottom: 10px; display: block; }
+        .sacolinha { border: 2px dashed var(--primary); padding: 15px; margin-top: 20px; border-radius: 10px; }
+        .item-carrinho { background: #1f1f1f; padding: 15px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid var(--primary); }
+        .total-geral { font-size: 20px; font-weight: bold; color: var(--secondary); text-align: right; margin-top: 15px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Forte Roxo Açaí</h1>
+    <h1>FORTE ROXO AÇAÍ</h1>
 
     <div id="menuInicial">
-        <div class="card" style="text-align: center;">
-            <h3>O que vamos pedir hoje?</h3>
-            <button class="btn-menu" onclick="showPage('arroz')">Arroz Ensopado</button>
-            <button class="btn-menu" onclick="showPage('macarrao')">Macarrão</button>
-        </div>
-    </div>
-
-    <div id="arroz" class="hidden">
-        <button class="btn-back" onclick="showPage('menuInicial')">← Voltar ao Menu</button>
-        <input type="text" id="nomeArroz" placeholder="Digite seu nome">
-
-        <div class="card">
-            <h3>Tipo de Atendimento</h3>
-            <label><input type="radio" name="tipoArroz" value="Comer no local"> Comer no local</label>
-            <label><input type="radio" name="tipoArroz" value="Delivery"> Delivery</label>
-            <label><input type="radio" name="tipoArroz" value="Retirada"> Retirada</label>
-        </div>
-
-        <div class="card">
-            <h3>Temperos</h3>
-            <span class="limit-info">(Selecione no máximo 3)</span>
-            <div class="checkbox-group" data-limit="3">
-                <label><input type="checkbox" class="tempArroz" value="Azeitona"> Azeitona</label>
-                <label><input type="checkbox" class="tempArroz" value="Batata Palha"> Batata Palha</label>
-                <label><input type="checkbox" class="tempArroz" value="Queijo Parmesão"> Queijo Parmesão</label>
-                <label><input type="checkbox" class="tempArroz" value="Milho"> Milho</label>
-                </div>
-        </div>
-
-        <button class="btn-send" onclick="enviarPedido('arroz')">Enviar via WhatsApp</button>
-    </div>
-
-    <div id="macarrao" class="hidden">
-        <button class="btn-back" onclick="showPage('menuInicial')">← Voltar ao Menu</button>
-        <input type="text" id="nomeMacarrao" placeholder="Digite seu nome">
+        <input type="text" id="nomeCliente" placeholder="Nome na comanda (Obrigatório)">
         
         <div class="card">
-            <h3>Tipo de Macarrão</h3>
-            <label><input type="radio" name="tipoMacarrao" value="Penne"> Penne</label>
-            <label><input type="radio" name="tipoMacarrao" value="Espaguete"> Espaguete</label>
+            <h3>Atendimento</h3>
+            <div class="grid-2">
+                <label><input type="radio" name="tipoAtendimento" value="Mesa (Local)"> Mesa (Local)</label>
+                <label><input type="radio" name="tipoAtendimento" value="Viagem (Retirada)"> Viagem (Retirada)</label>
+                <label style="grid-column: 1 / -1;"><input type="radio" name="tipoAtendimento" value="Delivery"> Delivery</label>
+            </div>
         </div>
 
-        <button class="btn-send" onclick="enviarPedido('macarrao')">Enviar via WhatsApp</button>
+        <div class="card" style="text-align: center;">
+            <h3>O que vamos pedir hoje?</h3>
+            <button class="btn-menu" onclick="abrirTela('arroz')">Arroz Ensopado</button>
+            <button class="btn-menu" onclick="abrirTela('macarrao')">Macarrão</button>
+        </div>
+
+        <div id="sessaoCarrinho" class="sacolinha" style="display: none;">
+            <h3 style="color: white; margin-top:0; border:none; padding:0;">🛒 Minha Sacolinha</h3>
+            <div id="listaItens"></div>
+            <div class="total-geral" id="valorTotal">Total: R$ 0,00</div>
+            <button class="btn-send" onclick="finalizarPedido()">Enviar Pedido (WhatsApp)</button>
+        </div>
     </div>
+
+    <div id="arroz" style="display: none;">
+        <button class="btn-back" onclick="abrirTela('menuInicial')">← Voltar ao Menu</button>
+        
+        <div class="card">
+            <h3>Qual o seu Arroz?</h3>
+            <span class="limit-info">Selecione 1 opção</span>
+            <div class="grid-2">
+                <label><input type="radio" name="proteinaArroz" value="Frango"> Frango (R$ 20)</label>
+                <label><input type="radio" name="proteinaArroz" value="Calabresa"> Calabresa (R$ 20)</label>
+                <label><input type="radio" name="proteinaArroz" value="Camarao"> Camarão (R$ 25)</label>
+                <label><input type="radio" name="proteinaArroz" value="File"> Filé (R$ 25)</label>
+                <label><input type="radio" name="proteinaArroz" value="Carneiro"> Carneiro (R$ 25)</label>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Como devemos refogar?</h3>
+            <div class="grid-2">
+                <label><input type="checkbox" class="refogarArroz" value="Alho"> Alho</label>
+                <label><input type="checkbox" class="refogarArroz" value="Cebola"> Cebola</label>
+                <label><input type="checkbox" class="refogarArroz" value="Azeite"> Azeite</label>
+                <label><input type="checkbox" class="refogarArroz" value="Manteiga"> Manteiga</label>
+            </div>
+        </div>
+
+        <div class="card" id="grupoTempArroz">
+            <h3>Escolha seus Temperos</h3>
+            <span class="limit-info">Escolha até 3 opções</span>
+            <div class="grid-2">
+                <label><input type="checkbox" class="tempArroz" value="Azeitona" onchange="limite(this, 'grupoTempArroz', 3)"> Azeitona</label>
+                <label><input type="checkbox" class="tempArroz" value="Orégano" onchange="limite(this, 'grupoTempArroz', 3)"> Orégano</label>
+                <label><input type="checkbox" class="tempArroz" value="Tomate" onchange="limite(this, 'grupoTempArroz', 3)"> Tomate</label>
+                <label><input type="checkbox" class="tempArroz" value="Batata Palha" onchange="limite(this, 'grupoTempArroz', 3)"> Batata Palha</label>
+                <label><input type="checkbox" class="tempArroz" value="Pimenta Calabresa" onchange="limite(this, 'grupoTempArroz', 3)"> Pimenta Calabresa</label>
+                <label><input type="checkbox" class="tempArroz" value="Pimentão" onchange="limite(this, 'grupoTempArroz', 3)"> Pimentão</label>
+                <label><input type="checkbox" class="tempArroz" value="Cebola" onchange="limite(this, 'grupoTempArroz', 3)"> Cebola</label>
+                <label><input type="checkbox" class="tempArroz" value="Pimenta de Cheiro" onchange="limite(this, 'grupoTempArroz', 3)"> Pimenta de Cheiro</label>
+                <label><input type="checkbox" class="tempArroz" value="Milho" onchange="limite(this, 'grupoTempArroz', 3)"> Milho</label>
+                <label><input type="checkbox" class="tempArroz" value="Cheiro Verde" onchange="limite(this, 'grupoTempArroz', 3)"> Cheiro Verde</label>
+                <label><input type="checkbox" class="tempArroz" value="Pimenta do Reino" onchange="limite(this, 'grupoTempArroz', 3)"> Pimenta do Reino</label>
+                <label><input type="checkbox" class="tempArroz" value="Mussarela" onchange="limite(this, 'grupoTempArroz', 3)"> Mussarela</label>
+                <label><input type="checkbox" class="tempArroz" value="Ervilha" onchange="limite(this, 'grupoTempArroz', 3)"> Ervilha</label>
+                <label><input type="checkbox" class="tempArroz" value="Queijo Parmesão" onchange="limite(this, 'grupoTempArroz', 3)"> Queijo Parm.</label>
+                <label><input type="checkbox" class="tempArroz" value="Presunto" onchange="limite(this, 'grupoTempArroz', 3)"> Presunto</label>
+                <label><input type="checkbox" class="tempArroz" value="Creme de Leite" onchange="limite(this, 'grupoTempArroz', 3)"> Creme de Leite</label>
+            </div>
+        </div>
+
+        <button class="btn-add" onclick="addCarrinho('arroz')">+ Adicionar Arroz</button>
+    </div>
+
+    <div id="macarrao" style="display: none;">
+        <button class="btn-back" onclick="abrirTela('menuInicial')">← Voltar ao Menu</button>
+        
+        <div class="card">
+            <h3>Tamanho</h3>
+            <span class="limit-info">Define o valor do prato</span>
+            <div class="grid-2">
+                <label><input type="radio" name="tamanhoMac" value="Pequeno"> Peq. (R$ 20)</label>
+                <label><input type="radio" name="tamanhoMac" value="Grande"> Grande (R$ 30)</label>
+            </div>
+        </div>
+
+        <div class="card" id="grupoRefogarMac">
+            <h3>Como refogar sua massa?</h3>
+            <span class="limit-info">Escolha até 3 opções</span>
+            <div class="grid-2">
+                <label><input type="checkbox" class="refogarMac" value="Alho" onchange="limite(this, 'grupoRefogarMac', 3)"> Alho</label>
+                <label><input type="checkbox" class="refogarMac" value="Cebola" onchange="limite(this, 'grupoRefogarMac', 3)"> Cebola</label>
+                <label><input type="checkbox" class="refogarMac" value="Azeite" onchange="limite(this, 'grupoRefogarMac', 3)"> Azeite</label>
+                <label><input type="checkbox" class="refogarMac" value="Manteiga" onchange="limite(this, 'grupoRefogarMac', 3)"> Manteiga</label>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Qual seu molho preferido?</h3>
+            <div class="grid-2">
+                <label><input type="checkbox" class="molhoMac" value="Branco"> Branco</label>
+                <label><input type="checkbox" class="molhoMac" value="Rosê"> Rosê</label>
+                <label><input type="checkbox" class="molhoMac" value="Vermelho"> Vermelho</label>
+            </div>
+        </div>
+
+        <div class="card" id="grupoTipoMac">
+            <h3>Qual seu Macarrão?</h3>
+            <span class="limit-info">Apenas 1 opção</span>
+            <div class="grid-2">
+                <label><input type="checkbox" class="tipoMacarrao" value="Penne" onchange="limite(this, 'grupoTipoMac', 1)"> Penne</label>
+                <label><input type="checkbox" class="tipoMacarrao" value="Parafuso" onchange="limite(this, 'grupoTipoMac', 1)"> Parafuso</label>
+                <label><input type="checkbox" class="tipoMacarrao" value="Espaguete" onchange="limite(this, 'grupoTipoMac', 1)"> Espaguete</label>
+                <label><input type="checkbox" class="tipoMacarrao" value="Talharim" onchange="limite(this, 'grupoTipoMac', 1)"> Talharim</label>
+            </div>
+        </div>
+
+        <div class="card" id="grupoIngredMac">
+            <h3>Escolha 3 Ingredientes</h3>
+            <span class="limit-info">Escolha até 3 opções</span>
+            <div class="grid-2">
+                <label><input type="checkbox" class="ingredMac" value="Bacon" onchange="limite(this, 'grupoIngredMac', 3)"> Bacon</label>
+                <label><input type="checkbox" class="ingredMac" value="Ovo de Codorna" onchange="limite(this, 'grupoIngredMac', 3)"> Ovo Codorna</label>
+                <label><input type="checkbox" class="ingredMac" value="Frango" onchange="limite(this, 'grupoIngredMac', 3)"> Frango</label>
+                <label><input type="checkbox" class="ingredMac" value="Calabresa" onchange="limite(this, 'grupoIngredMac', 3)"> Calabresa</label>
+                <label><input type="checkbox" class="ingredMac" value="Ovo Cozido" onchange="limite(this, 'grupoIngredMac', 3)"> Ovo Cozido</label>
+                <label><input type="checkbox" class="ingredMac" value="Salsicha" onchange="limite(this, 'grupoIngredMac', 3)"> Salsicha</label>
+                <label><input type="checkbox" class="ingredMac" value="Camarão" onchange="limite(this, 'grupoIngredMac', 3)"> Camarão</label>
+                <label><input type="checkbox" class="ingredMac" value="Mussarela" onchange="limite(this, 'grupoIngredMac', 3)"> Mussarela</label>
+                <label><input type="checkbox" class="ingredMac" value="Presunto" onchange="limite(this, 'grupoIngredMac', 3)"> Presunto</label>
+                <label><input type="checkbox" class="ingredMac" value="Carne de Sol" onchange="limite(this, 'grupoIngredMac', 3)"> Carne de Sol</label>
+                <label><input type="checkbox" class="ingredMac" value="Carne Moída" onchange="limite(this, 'grupoIngredMac', 3)"> Carne Moída</label>
+            </div>
+        </div>
+
+        <div class="card" id="grupoTempMac">
+            <h3>Escolha seus Temperos</h3>
+            <span class="limit-info">Escolha até 3 opções</span>
+            <div class="grid-2">
+                <label><input type="checkbox" class="tempMac" value="Azeitona" onchange="limite(this, 'grupoTempMac', 3)"> Azeitona</label>
+                <label><input type="checkbox" class="tempMac" value="Orégano" onchange="limite(this, 'grupoTempMac', 3)"> Orégano</label>
+                <label><input type="checkbox" class="tempMac" value="Tomate" onchange="limite(this, 'grupoTempMac', 3)"> Tomate</label>
+                <label><input type="checkbox" class="tempMac" value="Batata Palha" onchange="limite(this, 'grupoTempMac', 3)"> Batata Palha</label>
+                <label><input type="checkbox" class="tempMac" value="Pimenta Calabresa" onchange="limite(this, 'grupoTempMac', 3)"> Pimenta Calabresa</label>
+                <label><input type="checkbox" class="tempMac" value="Pimentão" onchange="limite(this, 'grupoTempMac', 3)"> Pimentão</label>
+                <label><input type="checkbox" class="tempMac" value="Cebola" onchange="limite(this, 'grupoTempMac', 3)"> Cebola</label>
+                <label><input type="checkbox" class="tempMac" value="Pimenta de Cheiro" onchange="limite(this, 'grupoTempMac', 3)"> Pimenta de Cheiro</label>
+                <label><input type="checkbox" class="tempMac" value="Palmito" onchange="limite(this, 'grupoTempMac', 3)"> Palmito</label>
+                <label><input type="checkbox" class="tempMac" value="Cheiro Verde" onchange="limite(this, 'grupoTempMac', 3)"> Cheiro Verde</label>
+                <label><input type="checkbox" class="tempMac" value="Pimenta do Reino" onchange="limite(this, 'grupoTempMac', 3)"> Pimenta do Reino</label>
+                <label><input type="checkbox" class="tempMac" value="Milho" onchange="limite(this, 'grupoTempMac', 3)"> Milho</label>
+                <label><input type="checkbox" class="tempMac" value="Ervilha" onchange="limite(this, 'grupoTempMac', 3)"> Ervilha</label>
+                <label><input type="checkbox" class="tempMac" value="Queijo Parmesão" onchange="limite(this, 'grupoTempMac', 3)"> Queijo Parm.</label>
+            </div>
+        </div>
+
+        <button class="btn-add" onclick="addCarrinho('macarrao')">+ Adicionar Macarrão</button>
+    </div>
+
 </div>
 
 <script>
-    // Navegação simples entre seções
-    function showPage(id) {
-        document.getElementById("menuInicial").classList.add("hidden");
-        document.getElementById("arroz").classList.add("hidden");
-        document.getElementById("macarrao").classList.add("hidden");
-        document.getElementById(id).classList.remove("hidden");
+    let carrinho = [];
+
+    // NAVEGAÇÃO
+    function abrirTela(idTela) {
+        document.getElementById("menuInicial").style.display = "none";
+        document.getElementById("arroz").style.display = "none";
+        document.getElementById("macarrao").style.display = "none";
+        
+        document.getElementById(idTela).style.display = "block";
         window.scrollTo(0, 0);
     }
 
-    // Controle de Limite de Checkbox (Ex: máx 3 temperos)
-    document.querySelectorAll('.checkbox-group').forEach(group => {
-        const limit = parseInt(group.getAttribute('data-limit'));
-        const checkboxes = group.querySelectorAll('input[type="checkbox"]');
+    // TRAVA DE LIMITES
+    function limite(checkbox, idGrupo, maximo) {
+        let grupo = document.getElementById(idGrupo);
+        let marcados = grupo.querySelectorAll('input:checked').length;
+        if (marcados > maximo) {
+            checkbox.checked = false;
+            alert(`Limite atingido! Máximo de ${maximo} opção(ões) nesta lista.`);
+        }
+    }
+
+    // LISTAR MARCADOS
+    function pegarLista(classe) {
+        let lista = [];
+        document.querySelectorAll("." + classe + ":checked").forEach(item => lista.push(item.value));
+        return lista;
+    }
+
+    // ADICIONAR NA SACOLINHA
+    function addCarrinho(tipo) {
+        let preco = 0;
+        let desc = [];
+
+        if (tipo === 'arroz') {
+            let prot = document.querySelector('input[name="proteinaArroz"]:checked');
+            if (!prot) return alert("Ei! Você esqueceu de escolher a Proteína do Arroz.");
+            
+            preco = (["Camarao", "File", "Carneiro"].includes(prot.value)) ? 25 : 20;
+            desc.push(`Proteína: ${prot.value}`);
+            
+            let refogar = pegarLista("refogarArroz");
+            if(refogar.length > 0) desc.push(`Refogar: ${refogar.join(", ")}`);
+            
+            let temp = pegarLista("tempArroz");
+            if(temp.length > 0) desc.push(`Temperos: ${temp.join(", ")}`);
+
+        } else {
+            let tam = document.querySelector('input[name="tamanhoMac"]:checked');
+            if (!tam) return alert("Ei! Escolha o Tamanho do Macarrão.");
+            
+            let massa = pegarLista("tipoMacarrao");
+            if (massa.length === 0) return alert("Ei! Escolha qual é o tipo de Massa.");
+
+            preco = (tam.value === "Grande") ? 30 : 20;
+            desc.push(`Tamanho: ${tam.value}`);
+            desc.push(`Massa: ${massa[0]}`);
+            
+            let refogar = pegarLista("refogarMac");
+            if(refogar.length > 0) desc.push(`Refogar: ${refogar.join(", ")}`);
+
+            let molho = pegarLista("molhoMac");
+            if(molho.length > 0) desc.push(`Molho: ${molho.join(", ")}`);
+            
+            let ingred = pegarLista("ingredMac");
+            if(ingred.length > 0) desc.push(`Ingredientes: ${ingred.join(", ")}`);
+
+            let temp = pegarLista("tempMac");
+            if(temp.length > 0) desc.push(`Temperos: ${temp.join(", ")}`);
+        }
+
+        carrinho.push({ prato: tipo === 'arroz' ? 'Arroz Ensopado' : 'Macarrão', preco: preco, desc: desc });
         
-        checkboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', () => {
-                const checkedCount = group.querySelectorAll('input:checked').length;
-                if (checkedCount > limit) {
-                    checkbox.checked = false;
-                    alert(`Você pode escolher no máximo ${limit} itens nesta seção.`);
-                }
-            });
+        // Limpar tela atual após adicionar
+        document.getElementById(tipo).querySelectorAll('input').forEach(i => i.checked = false);
+        
+        atualizarCarrinho();
+        abrirTela('menuInicial');
+    }
+
+    // ATUALIZAR VISUAL DA SACOLINHA
+    function atualizarCarrinho() {
+        let html = "";
+        let total = 0;
+        
+        carrinho.forEach((item, i) => {
+            total += item.preco;
+            html += `
+            <div class="item-carrinho">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                    <strong>${i+1}. ${item.prato}</strong>
+                    <span style="color:var(--secondary); font-weight:bold;">R$ ${item.preco.toFixed(2)}</span>
+                </div>
+                <div style="font-size: 14px; color: #bbb; line-height: 1.4;">${item.desc.join(" | ")}</div>
+                <button class="btn-remove" onclick="remover(${i})">❌ Remover item</button>
+            </div>`;
         });
-    });
 
-    function enviarPedido(tipoPrato) {
-        let nome = document.getElementById(tipoPrato === 'arroz' ? "nomeArroz" : "nomeMacarrao").value.trim();
-        if(!nome) return alert("Por favor, digite seu nome.");
+        document.getElementById("listaItens").innerHTML = html;
+        document.getElementById("valorTotal").innerText = `Total: R$ ${total.toFixed(2)}`;
+        document.getElementById("sessaoCarrinho").style.display = carrinho.length > 0 ? "block" : "none";
+    }
 
-        // Lógica de coleta de dados simplificada (similar à sua)
-        // ... (Aqui você mantém sua lógica de pegar selecionados)
-        
-        let msg = `*Pedido - Forte Roxo Açaí*\n\n*Cliente:* ${nome}\n*Prato:* ${tipoPrato.toUpperCase()}`;
-        
-        // Formata link e abre
-        let fone = "5599981024748";
-        window.open(`https://wa.me/${fone}?text=${encodeURIComponent(msg)}`);
+    function remover(index) {
+        carrinho.splice(index, 1);
+        atualizarCarrinho();
+    }
+
+    // ENVIAR WHATSAPP
+    function finalizarPedido() {
+        let nome = document.getElementById("nomeCliente").value.trim();
+        let atende = document.querySelector('input[name="tipoAtendimento"]:checked');
+
+        if (!nome) return alert("Por favor, preencha o Nome na comanda!");
+        if (!atende) return alert("Por favor, selecione se é Mesa, Viagem ou Delivery!");
+
+        let msg = `*NOVO PEDIDO - FORTE ROXO AÇAÍ*\n\n*Nome:* ${nome}\n*Atendimento:* ${atende.value}\n\n`;
+        let total = 0;
+
+        carrinho.forEach((item, i) => {
+            total += item.preco;
+            msg += `*${i+1}. ${item.prato}* (R$ ${item.preco.toFixed(2)})\n`;
+            item.desc.forEach(d => msg += ` - ${d}\n`);
+            msg += `\n`;
+        });
+
+        msg += `*Taxa de Entrega:* Grátis\n*TOTAL:* R$ ${total.toFixed(2)}`;
+        window.open(`https://wa.me/5599981024748?text=${encodeURIComponent(msg)}`);
     }
 </script>
 
